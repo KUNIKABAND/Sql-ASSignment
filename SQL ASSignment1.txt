@@ -1,0 +1,267 @@
+SQL ASSIGNMENT 1
+
+CREATE DATABASE Customer_Order;
+
+Use Customer_Order; 
+Create table Orderitem (
+ID int NOT NULL primary key,
+OrderId int NOT NULL,
+ProductId int NOT NULL,
+Unit_price decimal NOT NULL,
+Quantity int NOT NULL,
+)
+CREATE INDEX indexorderitem_OrderId
+On Orderitem (OrderId)
+CREATE INDEX indexorderitem_ProductId
+on Orderitem (ProductId)
+
+
+INSERT INTO Orderitem VALUES (100,210,1,200, 5),(200,215,2,201, 5), (300,220,3,202, 5);
+Select *from Orderitem
+
+Create table Product(
+id int NOT NULL primary key,
+Productname nvarchar (50) NOT NULL,
+unitprice decimal NOT NULL,
+Package nvarchar (30) NOT NULL,
+isdiscontinued bit
+);
+
+INSERT INTO Product VALUES (1, 'MOBILE', '200', 'ABC', 1) , (2, 'LAPTOP', '201', 'DEF', 0) , (3, 'CHARGER', '202', 'GHI', 1);
+Select *from Product;
+
+Create table Order1(
+Id int NOT NULL Primary key,
+Orderdate Date NOT NULL ,
+OrderNumber nvarchar NOT NULL,
+CustomerId int NOT NULL,
+TotalAmount int NOT NULL,
+)
+CREATE INDEX indexOrder_CustomerId_
+On Order1 (CustomerId);
+Create Index indexOrder_Orderdate
+on Order1 (Orderdate);
+
+INSERT INTO Order1 VALUES (201, '2023-01-05', '001', 1, 22), (202, '2023-01-06', '002', 2, 23), (203, '2023-01-06', '003', 3, 24); 
+Select *From Order1; 
+
+
+Create table Customer1(
+Customerid int NOT NULL primary key,
+Firstname nvarchar (40) NOT NULL,
+Lastname nvarchar (40)  NOT NULL,
+City nvarchar (40) NOT NULL,
+Country nvarchar (40) NOT NULL,
+Phone nvarchar(20) NOT NULL,
+);
+CREATE INDEX indexcustomername
+on Customer1 (Firstname,Lastname);
+
+INSERT INTO Customer1 VALUES (1, 'KUNIKA',' BAND', 'NAGPUR', 'INDIA', '9834387773'),(2, 'PRATYUSHA' , 'PATHIPAKA' , 'HYDERABAD', 'INDIA' , '9490001805' ), (3, 'AKSHAT' , 'BAND' , 'NAGPUR' , 'INDIA' , '7620450335');
+Select *from Customer1;
+
+
+
+*write a query to display Country whose name starts with A or I
+
+SELECT *FROM Customer1
+WHERE (Country Like 'a%') OR (Country Like 'i%');
+
+*write a query to display whose name of customer whose third character is i
+
+SELECT * FROM Customer1
+WHERE Firstname LIKE '__i%';
+
+
+
+SQL ASSIGNMENT 2
+
+create table Employee(
+Employeeid int NOT NULL   primary key,
+Employeefname varchar(200) NOT NULL,
+EmployeeLname varchar(200) NOT NULL,
+Department varchar(200) NOT NULL,
+Rating int ,
+);
+
+Create table Manager(
+Managerid int NOT NULL primary key,
+Managername varchar(200) NOT NULL ,
+);
+
+create table Department(
+Departmentid int NOT NULL primary key,
+Departmentname varchar(200) NOT NULL,
+);
+
+INSERT INTO Employee values (1, 'abc', 'xyz', 'uio', 5),(2,'jkl','wer','tyu',5);
+INSERT INTO Manager Values(22,'tu'),(34,'kl');
+INSERT INTO Department values (11,'uio'),(28,'tyu');
+ 
+ 
+ SELECT * FROM Employee;
+ SELECT * From Manager;
+ SELECT *FROM Department;
+
+
+*Display the details from Customer table who is from country Germany
+SELECT * FROM Customer1
+where country= 'Germany';
+
+*Display the full name of the employee
+SELECT Employername from Employers
+
+* Display the customer details who has Fax number
+SELECT * From Customer1
+Where 'Faxnumber' = Null
+
+*display the customer details whose name holds second letter as U
+SELECT *From Customer1
+WHERE Firstname LIKE '_u%'; 
+
+
+*Display order details which contains shipping date and arrange the order by date
+SELECT *FROM Order1
+Order by OrderDate;
+
+Select *FROM Order1
+shippingdate;
+
+*Print the orders shipped by ship name 'La corned'abondance' between 2 dates(Choose dates of your choice)
+SELECT *FROM Orderitem,Order1
+WHERE (Orderdate BETWEEN '2023-01-05' AND '2023-01-07')  AND shipname = 'La corned abondance';
+
+
+*Print the products supplied by 'Exotic Liquids'
+SELECT * FROM Product,Orderitem,Order1
+WHERE (Product.id =Orderitem.product_id  AND Orderitem.Orderid) AND Orderitem.Order_id=Order1.Orderid) AND (Order BY DATE);
+
+
+*print the average quantity ordered for every product
+SELECT AVG(Quantity)
+FROM Orderitem
+
+*Print all Employees with Manager Name
+SELECT Employername,Manager_name,Manager_name From Employers;
+
+
+
+SQL ASSIGNMENT 3
+
+CREATE DATABASE CUSTOMER;
+
+Create table order1(
+Id int NOT NULL primary key,
+ProductName nvarchar NOT NULL,
+CityName nvarchar NOT NULL
+);
+alter Table order1 add custid int;
+INSERT INTO order1 (Id, ProductName, CityName)
+VALUES (1,'CHAI', 'DELHI'),(2,'SEAFOOD' , 'MUMBAI'), (3,'JUICES', 'LONDON'), (4, 'COOFFE', 'JAIPUR');
+Select *From order1;
+
+update order1 set custid=11 where id =1;
+update order1 set custid=12 where id =2;
+update order1 set custid=13 where id =3;
+
+
+Create table Employers(
+ID int NOT NULL ,
+Employername nvarchar NOT NULL,
+Rating int NOT NULL,
+Departmentname nvarchar NOT NULL,
+);
+
+INSERT INTO Employers VALUES (101, 'Shiva' , 4, 'Manager'), (102, 'Akshat', 5, 'Advisor') ,(103, 'Vijin' ,4,'Supervisor');
+Select *From Employers;
+
+Create table Customer(
+id int NOT NULL,
+CustomerName nvarchar NOT NULL,
+phonenumber nvarchar NOT NULL,
+);
+
+INSERT INTO Customer VALUES ( 11,'KUNIKA' , '12345'), (12,'PRATYUSHA' , '456789') , (13,'MARY','030-0074321')
+Select *From Customer;
+
+
+*write a query to display the orders placed by customer with phone number 030-0074321
+SELECT *FROM Order1;
+SELECT *FROM Customer;
+SELECT *FROM Employers;
+
+SELECT *FROM order1
+LEFT JOIN Customer
+On Order1.custid= Customer.id;
+
+
+*fetching all the products which are available under Category ‘Seafood’.
+SELECT *From  order1
+WHERE ProductName= 'SEAFOOD';
+
+*Display the orders placed by customers not in London
+SELECT *From  order1
+WHERE CityName != 'LONDON';
+
+*selects all the order which are placed for the product Chai
+SELECT *From  order1
+WHERE ProductName= 'CHAI';
+
+*Write a query to display the name, department name and rating of any given employee
+SELECT *From Employers
+WHERE ID=101;
+
+
+
+Assignment 4
+
+
+*Display the employee details whose joined at first
+SELECT *FROM Employers Order1 BY JoinDate;
+
+*Display the employee details whose joined at recently
+SELECT *FROM Employers Order1 BY JoinDate;
+
+*Write a query to get most expense and least expensive Product list (name and unit price).
+SELECT TOP(1) Unitprice,Productname
+From Product
+Order By Unitprice;
+
+*Display the list of products that are out of stock
+SELECT Productname
+From Product
+Where Stock=Null;
+
+*Display complete list of customers, the OrderID and date of any orders they have made
+SELECT * , Id,OrderDate 
+FROM Order1 Inner join Customer
+on Order1.Id = Customer.ID;
+
+*Write  query that determines the customer who has placed the maximum number of orders
+SELECT custid, Firstname,Max(Ordernumber)
+from Order2 INNER JOIN Customer1
+On Order2.Id = Customer.id;
+
+
+*Display the customerid whose name has substring ‘RA’
+SELECT id 
+From Customer
+where SUBSTRING(Firstnamne,Lastname, LEN(Firstname),2)='RA';
+
+
+*Display the first word of all the company name
+SELECT name
+FROM Employer
+WHERE SUBSTRING(name,LEN(name),2);
+
+
+
+
+
+
+
+
+
+
+
+
